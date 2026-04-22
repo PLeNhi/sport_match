@@ -1,0 +1,9 @@
+{
+  "extends": "@sport-match/eslint-config",
+   "parserOptions": {
+    "project": "./tsconfig.json",
+    "eslint.workingDirectories": [
+    { "mode": "auto" }
+  ]
+  }
+}

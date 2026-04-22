@@ -1,0 +1,6 @@
+{
+  "extends": "@sport-match/eslint-config",
+  "rules": {
+    "react-native/no-unused-styles": "warn"
+  }
+}

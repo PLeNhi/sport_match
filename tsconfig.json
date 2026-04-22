@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@sport-match/shared": ["/packages/shared/src/index.ts"], 
+      "@sport-match/shared/*": ["/packages/shared/src/*"]
+    }
+  }
+}

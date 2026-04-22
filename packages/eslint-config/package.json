@@ -1,0 +1,10 @@
+{
+  "name": "@sport-match/eslint-config",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0"
+  }
+}

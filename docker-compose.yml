@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: sport_match_db
+    environment:
+      POSTGRES_USER: sport_match_user
+      POSTGRES_PASSWORD: sport_match_password
+      POSTGRES_DB: sport_match_dev
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sport_match_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sport_match_user -d sport_match_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  sport_match_network:
+    driver: bridge

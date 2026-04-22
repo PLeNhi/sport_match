@@ -1,0 +1,27 @@
+
+ { "extends": "@sport-match/typescript-config/base.json",
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "module": "Node16",
+    "target": "ES2020",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./src", 
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@common/*": ["./src/common/*"]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "composite": true,     
+    "declaration": true,
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
