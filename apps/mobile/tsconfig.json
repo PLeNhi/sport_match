@@ -1,9 +1,14 @@
 {
-  "extends": "@sport-match/typescript-config/react.json",
+  "extends": "../../packages/typescript-config/react.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "types": ["react-native", "jest"],
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "rootDir": ".",
+    "outDir": ".",
+    "types": ["react-native", "jest", "node"],
     "paths": {
       "@/*": ["./src/*"],
       "@screens/*": ["./src/screens/*"],
@@ -11,9 +16,10 @@
       "@hooks/*": ["./src/hooks/*"],
       "@utils/*": ["./src/utils/*"],
       "@store/*": ["./src/store/*"],
-      "@types/*": ["./src/types/*"]
+      "@types/*": ["./src/types/*"],
+      
     }
   },
-  "include": ["src"],
+  "include": ["src", "index.ts"],
   "exclude": ["node_modules", "dist"]
 }

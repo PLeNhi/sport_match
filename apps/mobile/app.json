@@ -5,6 +5,10 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "entryPoint": "./index.ts",
+    "packagerOpts": {
+      "config": "metro.config.js"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -12,7 +16,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTabletMode": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sportmatch.app"
     },
     "android": {
       "adaptiveIcon": {
