@@ -1,24 +1,25 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { gameSessions, venues, users, hostProfiles, sessionParticipants } from '../../db/schema';
+import { eq, and } from 'drizzle-orm';
 import { CreateSessionDto, UpdateSessionDto } from './dto/create-session.dto';
 import { GameSessionDTO, SessionFilterParams } from '@sport-match/shared';
 
 @Injectable()
 export class SessionsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async create(hostId: string, dto: CreateSessionDto): Promise<GameSessionDTO> {
     // Validate venue exists
-    const venue = await this.prisma.venue.findUnique({
-      where: { id: dto.venueId },
-    });
+    const venueResult = await this.drizzle.db.select().from(venues).where(eq(venues.id, dto.venueId)).limit(1);
 
-    if (!venue) {
+    if (venueResult.length === 0) {
       throw new BadRequestException('Venue not found');
     }
 
-    const session = await this.prisma.gameSession.create({
-      data: {
+    const sessionResult = await this.drizzle.db
+      .insert(gameSessions)
+      .values({
         hostId,
         venueId: dto.venueId,
         title: dto.title,
@@ -31,101 +32,87 @@ export class SessionsService {
         priceLabel: dto.priceLabel,
         status: 'open',
         sportType: 'badminton',
-      },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-    });
+      })
+      .returning();
 
-    return this.mapToDTO(session);
+    const session = sessionResult[0];
+    const fullSession = await this.getSessionWithRelations(session.id);
+    return this.mapToDTO(fullSession!);
   }
 
   async findAll(filters: SessionFilterParams = {}): Promise<GameSessionDTO[]> {
-    const sessions = await this.prisma.gameSession.findMany({
-      where: {
-        ...(filters.city && { venue: { city: filters.city } }),
-        ...(filters.district && { venue: { district: filters.district } }),
-        ...(filters.date && { date: filters.date }),
-        ...(filters.skillLevel && { skillLevel: filters.skillLevel }),
-        ...(filters.hostId && { hostId: filters.hostId }),
-        ...(filters.onlyOpen && { status: 'open' }),
-      },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-      orderBy: [{ date: 'asc' }, { startTime: 'asc' }],
-    });
+    const conditions = [];
+    if (filters.date) conditions.push(eq(gameSessions.date, filters.date));
+    if (filters.skillLevel) conditions.push(eq(gameSessions.skillLevel, filters.skillLevel));
+    if (filters.hostId) conditions.push(eq(gameSessions.hostId, filters.hostId));
+    if (filters.onlyOpen) conditions.push(eq(gameSessions.status, 'open'));
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const sessionsResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(whereClause)
+      .orderBy(gameSessions.date, gameSessions.startTime);
+
+    const sessions = [];
+    for (const session of sessionsResult) {
+      const fullSession = await this.getSessionWithRelations(session.id);
+      if (fullSession) {
+        // Apply venue filters
+        if (filters.city && fullSession.venue?.city !== filters.city) continue;
+        if (filters.district && fullSession.venue?.district !== filters.district) continue;
+        sessions.push(fullSession);
+      }
+    }
 
     return sessions.map((s) => this.mapToDTO(s));
   }
 
   async findById(id: string, userId?: string): Promise<GameSessionDTO | null> {
-    const session = await this.prisma.gameSession.findUnique({
-      where: { id },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-    });
+    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
 
-    if (!session) {
+    if (sessionResult.length === 0) {
       return null;
     }
 
+    const session = await this.getSessionWithRelations(id);
     return this.mapToDTO(session, userId);
   }
 
   async getHostSessions(hostId: string): Promise<GameSessionDTO[]> {
-    const sessions = await this.prisma.gameSession.findMany({
-      where: { hostId },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-      orderBy: [{ date: 'asc' }, { startTime: 'asc' }],
-    });
+    const sessionsResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(eq(gameSessions.hostId, hostId))
+      .orderBy(gameSessions.date, gameSessions.startTime);
+
+    const sessions = [];
+    for (const session of sessionsResult) {
+      const fullSession = await this.getSessionWithRelations(session.id);
+      if (fullSession) {
+        sessions.push(fullSession);
+      }
+    }
 
     return sessions.map((s) => this.mapToDTO(s));
   }
 
   async update(id: string, hostId: string, dto: UpdateSessionDto): Promise<GameSessionDTO> {
-    const session = await this.prisma.gameSession.findUnique({
-      where: { id },
-    });
+    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
 
-    if (!session) {
+    if (sessionResult.length === 0) {
       throw new NotFoundException('Session not found');
     }
 
+    const session = sessionResult[0];
     if (session.hostId !== hostId) {
       throw new BadRequestException('Only host can update this session');
     }
 
-    const updated = await this.prisma.gameSession.update({
-      where: { id },
-      data: {
+    await this.drizzle.db
+      .update(gameSessions)
+      .set({
         title: dto.title,
         date: dto.date,
         startTime: dto.startTime,
@@ -133,19 +120,46 @@ export class SessionsService {
         description: dto.description,
         priceLabel: dto.priceLabel,
         status: dto.status,
-      },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-    });
+        updatedAt: new Date(),
+      })
+      .where(eq(gameSessions.id, id));
 
-    return this.mapToDTO(updated);
+    const updated = await this.getSessionWithRelations(id);
+    return this.mapToDTO(updated!);
+  }
+
+  private async getSessionWithRelations(sessionId: string) {
+    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, sessionId)).limit(1);
+    if (sessionResult.length === 0) return null;
+
+    const session = sessionResult[0];
+
+    // Get venue
+    const venueResult = await this.drizzle.db.select().from(venues).where(eq(venues.id, session.venueId)).limit(1);
+    const venue = venueResult[0] || null;
+
+    // Get host with profile
+    const hostResult = await this.drizzle.db
+      .select({
+        user: users,
+        profile: hostProfiles,
+      })
+      .from(users)
+      .leftJoin(hostProfiles, eq(users.id, hostProfiles.userId))
+      .where(eq(users.id, session.hostId))
+      .limit(1);
+
+    const host = hostResult[0] ? { ...hostResult[0].user, hostProfile: hostResult[0].profile } : null;
+
+    // Get participants
+    const participantsResult = await this.drizzle.db.select().from(sessionParticipants).where(eq(sessionParticipants.sessionId, sessionId));
+
+    return {
+      ...session,
+      venue,
+      host,
+      participants: participantsResult,
+    };
   }
 
   async updateStatus(
@@ -153,32 +167,21 @@ export class SessionsService {
     status: string,
     sessionData?: any,
   ): Promise<GameSessionDTO | null> {
-    const session = await this.prisma.gameSession.findUnique({
-      where: { id },
-    });
+    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
 
-    if (!session) {
+    if (sessionResult.length === 0) {
       return null;
     }
 
-    const updated = await this.prisma.gameSession.update({
-      where: { id },
-      data: {
-        status,
-        ...sessionData,
-      },
-      include: {
-        venue: true,
-        host: {
-          include: {
-            hostProfile: true,
-          },
-        },
-        participants: true,
-      },
-    });
+    const updateData: any = { status, updatedAt: new Date() };
+    if (sessionData) {
+      Object.assign(updateData, sessionData);
+    }
 
-    return this.mapToDTO(updated);
+    await this.drizzle.db.update(gameSessions).set(updateData).where(eq(gameSessions.id, id));
+
+    const updated = await this.getSessionWithRelations(id);
+    return this.mapToDTO(updated!);
   }
 
   private mapToDTO(session: any, userId?: string): GameSessionDTO {

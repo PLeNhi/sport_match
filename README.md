@@ -41,7 +41,7 @@ sport_match/
 │   │   │   ├── modules/     # Feature modules
 │   │   │   ├── common/      # Shared utilities
 │   │   │   └── main.ts      # Entry point
-│   │   ├── prisma/          # Database schema
+│   │   ├── drizzle/         # Database schema & migrations
 │   │   └── package.json
 │   │
 │   └── mobile/              # Expo React Native app
@@ -174,7 +174,7 @@ pnpm web
 
 - RESTful API with clean architecture
 - Class-based validation with class-validator
-- Prisma ORM for database
+- Drizzle ORM for database
 - Mock authentication (OTP placeholder)
 - Role-based access control
 - Error handling & logging
@@ -303,7 +303,7 @@ Axios API Client (with auth interceptor)
   ↓
 NestJS REST API
   ↓
-Prisma ORM
+Drizzle ORM
   ↓
 PostgreSQL
 ```

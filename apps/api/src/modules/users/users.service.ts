@@ -1,36 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { users } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDTO } from '@sport-match/shared';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async findById(id: string): Promise<UserDTO | null> {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
+    const result = await this.drizzle.db.select().from(users).where(eq(users.id, id)).limit(1);
 
-    if (!user) {
+    if (result.length === 0) {
       return null;
     }
 
-    return this.mapToDTO(user);
+    return this.mapToDTO(result[0]);
   }
 
   async updateUser(id: string, dto: UpdateUserDto): Promise<UserDTO> {
-    const user = await this.prisma.user.update({
-      where: { id },
-      data: {
+    const result = await this.drizzle.db
+      .update(users)
+      .set({
         name: dto.name,
         avatarUrl: dto.avatarUrl,
         city: dto.city,
         district: dto.district,
-      },
-    });
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, id))
+      .returning();
 
-    return this.mapToDTO(user);
+    return this.mapToDTO(result[0]);
   }
 
   private mapToDTO(user: any): UserDTO {

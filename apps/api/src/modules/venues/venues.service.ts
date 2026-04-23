@@ -1,33 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { venues } from '../../db/schema';
+import { eq, and } from 'drizzle-orm';
 import { VenueDTO } from '@sport-match/shared';
 
 @Injectable()
 export class VenuesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async findAll(filters?: { city?: string; district?: string }): Promise<VenueDTO[]> {
-    const venues = await this.prisma.venue.findMany({
-      where: {
-        ...(filters?.city && { city: filters.city }),
-        ...(filters?.district && { district: filters.district }),
-      },
-      orderBy: { name: 'asc' },
-    });
+    const conditions = [];
+    if (filters?.city) conditions.push(eq(venues.city, filters.city));
+    if (filters?.district) conditions.push(eq(venues.district, filters.district));
 
-    return venues.map((v) => this.mapToDTO(v));
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const result = await this.drizzle.db
+      .select()
+      .from(venues)
+      .where(whereClause)
+      .orderBy(venues.name);
+
+    return result.map((v) => this.mapToDTO(v));
   }
 
   async findById(id: string): Promise<VenueDTO | null> {
-    const venue = await this.prisma.venue.findUnique({
-      where: { id },
-    });
+    const result = await this.drizzle.db
+      .select()
+      .from(venues)
+      .where(eq(venues.id, id))
+      .limit(1);
 
-    if (!venue) {
+    if (result.length === 0) {
       return null;
     }
 
-    return this.mapToDTO(venue);
+    return this.mapToDTO(result[0]);
   }
 
   private mapToDTO(venue: any): VenueDTO {

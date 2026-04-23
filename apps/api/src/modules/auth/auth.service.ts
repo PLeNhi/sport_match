@@ -1,13 +1,15 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { users } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 import { MockLoginDto } from './dto/mock-login.dto';
 import { UserDTO } from '@sport-match/shared';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    private drizzle: DrizzleService,
     private jwtService: JwtService,
   ) {}
 
@@ -19,18 +21,18 @@ export class AuthService {
     }
 
     // Find or create user
-    let user = await this.prisma.user.findUnique({
-      where: { phone: normalized },
-    });
+    let userResult = await this.drizzle.db.select().from(users).where(eq(users.phone, normalized)).limit(1);
 
-    if (!user) {
-      user = await this.prisma.user.create({
-        data: {
-          phone: normalized,
-          name: dto.name || `User ${normalized.slice(-4)}`,
-          role: 'player',
-        },
-      });
+    let user;
+    if (userResult.length === 0) {
+      const newUserResult = await this.drizzle.db.insert(users).values({
+        phone: normalized,
+        name: dto.name || `User ${normalized.slice(-4)}`,
+        role: 'player',
+      }).returning();
+      user = newUserResult[0];
+    } else {
+      user = userResult[0];
     }
 
     const token = this.jwtService.sign(
@@ -53,15 +55,13 @@ export class AuthService {
   async validateToken(token: string) {
     try {
       const payload = this.jwtService.verify(token);
-      const user = await this.prisma.user.findUnique({
-        where: { id: payload.id },
-      });
+      const userResult = await this.drizzle.db.select().from(users).where(eq(users.id, payload.id)).limit(1);
       
-      if (!user) {
+      if (userResult.length === 0) {
         return null;
       }
 
-      return this.mapToDTO(user);
+      return this.mapToDTO(userResult[0]);
     } catch {
       return null;
     }

@@ -1,19 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from '../db/schema';
 
 @Injectable()
-export class PrismaService extends PrismaClient {
+export class DrizzleService implements OnModuleInit, OnModuleDestroy {
+  private client: postgres.Sql;
+  public db: ReturnType<typeof drizzle>;
+
   constructor() {
-    super({
-      log: ['query', 'error', 'warn'],
-    });
+    this.client = postgres(process.env.DATABASE_URL!, { prepare: false });
+    this.db = drizzle(this.client, { schema });
   }
 
   async onModuleInit() {
-    await this.$connect();
+    // Test connection
+    await this.client`SELECT 1`;
   }
 
   async onModuleDestroy() {
-    await this.$disconnect();
+    await this.client.end();
   }
 }

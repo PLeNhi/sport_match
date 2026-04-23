@@ -1,77 +1,85 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { sessionParticipants } from '../../db/schema';
+import { eq, and } from 'drizzle-orm';
 import { SessionParticipantDTO } from '@sport-match/shared';
 
 @Injectable()
 export class ParticipantsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async create(sessionId: string, userId: string): Promise<SessionParticipantDTO> {
-    const participant = await this.prisma.sessionParticipant.create({
-      data: {
+    const result = await this.drizzle.db
+      .insert(sessionParticipants)
+      .values({
         sessionId,
         userId,
         attendanceStatus: 'joined',
-      },
-    });
+      })
+      .returning();
 
-    return this.mapToDTO(participant);
+    return this.mapToDTO(result[0]);
   }
 
   async findBySessionAndUser(
     sessionId: string,
     userId: string,
   ): Promise<SessionParticipantDTO | null> {
-    const participant = await this.prisma.sessionParticipant.findUnique({
-      where: {
-        sessionId_userId: { sessionId, userId },
-      },
-    });
+    const result = await this.drizzle.db
+      .select()
+      .from(sessionParticipants)
+      .where(and(eq(sessionParticipants.sessionId, sessionId), eq(sessionParticipants.userId, userId)))
+      .limit(1);
 
-    if (!participant) {
+    if (result.length === 0) {
       return null;
     }
 
-    return this.mapToDTO(participant);
+    return this.mapToDTO(result[0]);
   }
 
   async findBySession(sessionId: string): Promise<SessionParticipantDTO[]> {
-    const participants = await this.prisma.sessionParticipant.findMany({
-      where: { sessionId },
-      orderBy: { joinedAt: 'asc' },
-    });
+    const result = await this.drizzle.db
+      .select()
+      .from(sessionParticipants)
+      .where(eq(sessionParticipants.sessionId, sessionId))
+      .orderBy(sessionParticipants.joinedAt);
 
-    return participants.map((p) => this.mapToDTO(p));
+    return result.map((p) => this.mapToDTO(p));
   }
 
   async findById(id: string): Promise<SessionParticipantDTO | null> {
-    const participant = await this.prisma.sessionParticipant.findUnique({
-      where: { id },
-    });
+    const result = await this.drizzle.db
+      .select()
+      .from(sessionParticipants)
+      .where(eq(sessionParticipants.id, id))
+      .limit(1);
 
-    if (!participant) {
+    if (result.length === 0) {
       return null;
     }
 
-    return this.mapToDTO(participant);
+    return this.mapToDTO(result[0]);
   }
 
   async updateStatus(id: string, attendanceStatus: string): Promise<SessionParticipantDTO> {
-    const participant = await this.prisma.sessionParticipant.update({
-      where: { id },
-      data: { attendanceStatus },
-    });
+    const result = await this.drizzle.db
+      .update(sessionParticipants)
+      .set({ attendanceStatus, updatedAt: new Date() })
+      .where(eq(sessionParticipants.id, id))
+      .returning();
 
-    return this.mapToDTO(participant);
+    return this.mapToDTO(result[0]);
   }
 
   async remove(id: string): Promise<SessionParticipantDTO> {
-    const participant = await this.prisma.sessionParticipant.update({
-      where: { id },
-      data: { attendanceStatus: 'removed' },
-    });
+    const result = await this.drizzle.db
+      .update(sessionParticipants)
+      .set({ attendanceStatus: 'removed', updatedAt: new Date() })
+      .where(eq(sessionParticipants.id, id))
+      .returning();
 
-    return this.mapToDTO(participant);
+    return this.mapToDTO(result[0]);
   }
 
   private mapToDTO(participant: any): SessionParticipantDTO {

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { VenuesService } from './venues.service';
 import { VenuesController } from './venues.controller';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
 
 @Module({
   controllers: [VenuesController],
-  providers: [VenuesService, PrismaService],
+  providers: [VenuesService, DrizzleService],
   exports: [VenuesService],
 })
 export class VenuesModule {}

@@ -7,7 +7,7 @@ import { VenuesModule } from '@modules/venues/venues.module';
 import { SessionsModule } from '@modules/sessions/sessions.module';
 import { ParticipantsModule } from '@modules/participants/participants.module';
 import { HealthModule } from '@modules/health/health.module';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
 
 @Module({
   imports: [
@@ -23,6 +23,6 @@ import { PrismaService } from '@common/prisma.service';
     ParticipantsModule,
     HealthModule,
   ],
-  providers: [PrismaService],
+  providers: [DrizzleService],
 })
 export class AppModule {}

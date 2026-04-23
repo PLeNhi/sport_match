@@ -1,14 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { SessionsController } from './sessions.controller';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
 import { AuthModule } from '../auth/auth.module';
 import { ParticipantsModule } from '../participants/participants.module';
 
 @Module({
-  imports: [AuthModule, ParticipantsModule],
+  imports: [AuthModule, forwardRef(() => ParticipantsModule)],
   controllers: [SessionsController],
-  providers: [SessionsService, PrismaService],
+  providers: [SessionsService, DrizzleService],
   exports: [SessionsService],
 })
 export class SessionsModule {}

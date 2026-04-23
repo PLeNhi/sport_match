@@ -1,61 +1,70 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '@common/prisma.service';
+import { DrizzleService } from '@common/prisma.service';
+import { hostProfiles, users } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 import { CreateHostProfileDto, UpdateHostProfileDto } from './dto/create-host-profile.dto';
 import { HostProfileDTO } from '@sport-match/shared';
 
 @Injectable()
 export class HostsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async createProfile(userId: string, dto: CreateHostProfileDto): Promise<HostProfileDTO> {
     // Check if user already has a host profile
-    const existing = await this.prisma.hostProfile.findUnique({
-      where: { userId },
-    });
+    const existing = await this.drizzle.db
+      .select()
+      .from(hostProfiles)
+      .where(eq(hostProfiles.userId, userId))
+      .limit(1);
 
-    if (existing) {
+    if (existing.length > 0) {
       throw new BadRequestException('User already has a host profile');
     }
 
     // Update user role to host
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { role: 'host' },
-    });
+    await this.drizzle.db
+      .update(users)
+      .set({ role: 'host', updatedAt: new Date() })
+      .where(eq(users.id, userId));
 
-    const profile = await this.prisma.hostProfile.create({
-      data: {
+    const result = await this.drizzle.db
+      .insert(hostProfiles)
+      .values({
         userId,
         displayName: dto.displayName,
         bio: dto.bio,
-      },
-    });
+      })
+      .returning();
 
-    return this.mapToDTO(profile);
+    return this.mapToDTO(result[0]);
   }
 
   async getProfile(userId: string): Promise<HostProfileDTO | null> {
-    const profile = await this.prisma.hostProfile.findUnique({
-      where: { userId },
-    });
+    const result = await this.drizzle.db
+      .select()
+      .from(hostProfiles)
+      .where(eq(hostProfiles.userId, userId))
+      .limit(1);
 
-    if (!profile) {
+    if (result.length === 0) {
       return null;
     }
 
-    return this.mapToDTO(profile);
+    return this.mapToDTO(result[0]);
   }
 
   async updateProfile(userId: string, dto: UpdateHostProfileDto): Promise<HostProfileDTO> {
-    const profile = await this.prisma.hostProfile.update({
-      where: { userId },
-      data: {
+    const result = await this.drizzle.db
+      .update(hostProfiles)
+      .set({
         displayName: dto.displayName,
         bio: dto.bio,
-      },
-    });
+        updatedAt: new Date(),
+      })
+      .where(eq(hostProfiles.userId, userId))
+      .returning();
 
-    return this.mapToDTO(profile);
+    return this.mapToDTO(result[0]);
   }
 
   private mapToDTO(profile: any): HostProfileDTO {
