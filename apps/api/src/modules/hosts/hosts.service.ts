@@ -1,15 +1,21 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { DrizzleService } from '@common/prisma.service';
-import { hostProfiles, users } from '../../db/schema';
-import { eq } from 'drizzle-orm';
-import { CreateHostProfileDto, UpdateHostProfileDto } from './dto/create-host-profile.dto';
-import { HostProfileDTO } from '@sport-match/shared';
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { DrizzleService } from "@common/prisma.service";
+import { hostProfiles, users } from "../../db/schema";
+import { eq } from "drizzle-orm";
+import {
+  CreateHostProfileDto,
+  UpdateHostProfileDto,
+} from "./dto/create-host-profile.dto";
+import { HostProfileDTO } from "@sport-match/shared";
 
 @Injectable()
 export class HostsService {
   constructor(private drizzle: DrizzleService) {}
 
-  async createProfile(userId: string, dto: CreateHostProfileDto): Promise<HostProfileDTO> {
+  async createProfile(
+    userId: string,
+    dto: CreateHostProfileDto,
+  ): Promise<HostProfileDTO> {
     // Check if user already has a host profile
     const existing = await this.drizzle.db
       .select()
@@ -18,13 +24,13 @@ export class HostsService {
       .limit(1);
 
     if (existing.length > 0) {
-      throw new BadRequestException('User already has a host profile');
+      throw new BadRequestException("User already has a host profile");
     }
 
     // Update user role to host
     await this.drizzle.db
       .update(users)
-      .set({ role: 'host', updatedAt: new Date() })
+      .set({ role: "host", updatedAt: new Date() })
       .where(eq(users.id, userId));
 
     const result = await this.drizzle.db
@@ -53,7 +59,10 @@ export class HostsService {
     return this.mapToDTO(result[0]);
   }
 
-  async updateProfile(userId: string, dto: UpdateHostProfileDto): Promise<HostProfileDTO> {
+  async updateProfile(
+    userId: string,
+    dto: UpdateHostProfileDto,
+  ): Promise<HostProfileDTO> {
     const result = await this.drizzle.db
       .update(hostProfiles)
       .set({

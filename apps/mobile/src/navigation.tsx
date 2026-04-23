@@ -1,10 +1,10 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
-import { useAuthStore } from './store/auth.store';
-import { LoadingView } from './components';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text } from "react-native";
+import { useAuthStore } from "./store/auth.store";
+import { LoadingView } from "./components";
 
 import {
   LoginScreen,
@@ -16,7 +16,7 @@ import {
   CreateSessionScreen,
   HostSessionDetailScreen,
   BecomeHostScreen,
-} from './screens';
+} from "./screens";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,7 +26,7 @@ function HomeStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        headerBackTitle: 'Back',
+        headerBackTitle: "Back",
       }}
     >
       <Stack.Screen
@@ -37,7 +37,7 @@ function HomeStack() {
       <Stack.Screen
         name="SessionDetail"
         component={SessionDetailScreen}
-        options={{ title: 'Session Details' }}
+        options={{ title: "Session Details" }}
       />
     </Stack.Navigator>
   );
@@ -48,7 +48,7 @@ function MySessionsStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        headerBackTitle: 'Back',
+        headerBackTitle: "Back",
       }}
     >
       <Stack.Screen
@@ -59,7 +59,7 @@ function MySessionsStack() {
       <Stack.Screen
         name="SessionDetail"
         component={SessionDetailScreen}
-        options={{ title: 'Session Details' }}
+        options={{ title: "Session Details" }}
       />
     </Stack.Navigator>
   );
@@ -70,7 +70,7 @@ function HostStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        headerBackTitle: 'Back',
+        headerBackTitle: "Back",
       }}
     >
       <Stack.Screen
@@ -81,12 +81,12 @@ function HostStack() {
       <Stack.Screen
         name="CreateSession"
         component={CreateSessionScreen}
-        options={{ title: 'Create Session' }}
+        options={{ title: "Create Session" }}
       />
       <Stack.Screen
         name="HostSessionDetail"
         component={HostSessionDetailScreen}
-        options={{ title: 'Manage Session' }}
+        options={{ title: "Manage Session" }}
       />
     </Stack.Navigator>
   );
@@ -97,7 +97,7 @@ function ProfileStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        headerBackTitle: 'Back',
+        headerBackTitle: "Back",
       }}
     >
       <Stack.Screen
@@ -108,7 +108,7 @@ function ProfileStack() {
       <Stack.Screen
         name="BecomeHost"
         component={BecomeHostScreen}
-        options={{ title: 'Become a Host' }}
+        options={{ title: "Become a Host" }}
       />
     </Stack.Navigator>
   );
@@ -119,8 +119,8 @@ function AuthenticatedApp() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#0066cc',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: "#0066cc",
+        tabBarInactiveTintColor: "#999",
         tabBarLabel: getTabLabel(route.name),
         tabBarIcon: ({ color }) => <TabIcon name={route.name} color={color} />,
       })}
@@ -128,22 +128,22 @@ function AuthenticatedApp() {
       <Tab.Screen
         name="Home"
         component={HomeStack}
-        options={{ title: 'Browse' }}
+        options={{ title: "Browse" }}
       />
       <Tab.Screen
         name="MySessions"
         component={MySessionsStack}
-        options={{ title: 'My Sessions' }}
+        options={{ title: "My Sessions" }}
       />
       <Tab.Screen
         name="Host"
         component={HostStack}
-        options={{ title: 'Host' }}
+        options={{ title: "Host" }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileStack}
-        options={{ title: 'Profile' }}
+        options={{ title: "Profile" }}
       />
     </Tab.Navigator>
   );
@@ -163,21 +163,21 @@ function UnauthenticatedApp() {
 
 function TabIcon({ name, color }: { name: string; color: string }) {
   const icons: Record<string, string> = {
-    Home: '🏠',
-    MySessions: '📋',
-    Host: '🎯',
-    Profile: '👤',
+    Home: "🏠",
+    MySessions: "📋",
+    Host: "🎯",
+    Profile: "👤",
   };
 
-  return <Text style={{ fontSize: 20 }}>{icons[name] || '❓'}</Text>;
+  return <Text style={{ fontSize: 20 }}>{icons[name] || "❓"}</Text>;
 }
 
 function getTabLabel(name: string): string {
   const labels: Record<string, string> = {
-    Home: 'Browse',
-    MySessions: 'My Sessions',
-    Host: 'Host',
-    Profile: 'Profile',
+    Home: "Browse",
+    MySessions: "My Sessions",
+    Host: "Host",
+    Profile: "Profile",
   };
   return labels[name] || name;
 }

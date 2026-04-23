@@ -1,18 +1,18 @@
-import React from 'react';
-import { View, ScrollView, Text, StyleSheet, TextInput } from 'react-native';
-import { PrimaryButton, LoadingView } from '../components';
-import { useLogin } from '../hooks/useAuth';
-import { useAuthStore } from '../store/auth.store';
+import React from "react";
+import { View, ScrollView, Text, StyleSheet, TextInput } from "react-native";
+import { PrimaryButton, LoadingView } from "../components";
+import { useLogin } from "../hooks/useAuth";
+import { useAuthStore } from "../store/auth.store";
 
 export function LoginScreen() {
-  const [phone, setPhone] = React.useState('');
-  const [name, setName] = React.useState('');
+  const [phone, setPhone] = React.useState("");
+  const [name, setName] = React.useState("");
   const login = useLogin();
   const setUser = useAuthStore((state) => state.setUser);
 
   const handleLogin = async () => {
     if (!phone.trim()) {
-      alert('Please enter your phone number');
+      alert("Please enter your phone number");
       return;
     }
 
@@ -50,9 +50,7 @@ export function LoginScreen() {
           editable={!login.isPending}
         />
 
-        {login.error && (
-          <Text style={styles.errorText}>{login.error}</Text>
-        )}
+        {login.error && <Text style={styles.errorText}>{login.error}</Text>}
 
         <PrimaryButton
           title="Login"
@@ -72,59 +70,59 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   content: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 20,
   },
   header: {
     marginBottom: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 32,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
   form: {
     marginBottom: 20,
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 8,
     marginTop: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   button: {
     marginTop: 24,
   },
   errorText: {
-    color: '#ff3b30',
+    color: "#ff3b30",
     fontSize: 14,
     marginTop: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   infoText: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
     marginTop: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

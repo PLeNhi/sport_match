@@ -186,12 +186,8 @@
           "name": "GameSession_hostId_User_id_fk",
           "tableFrom": "GameSession",
           "tableTo": "User",
-          "columnsFrom": [
-            "hostId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["hostId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -199,12 +195,8 @@
           "name": "GameSession_venueId_Venue_id_fk",
           "tableFrom": "GameSession",
           "tableTo": "Venue",
-          "columnsFrom": [
-            "venueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["venueId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -287,12 +279,8 @@
           "name": "HostProfile_userId_User_id_fk",
           "tableFrom": "HostProfile",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -302,9 +290,7 @@
         "HostProfile_userId_unique": {
           "name": "HostProfile_userId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "userId"
-          ]
+          "columns": ["userId"]
         }
       },
       "policies": {},
@@ -413,12 +399,8 @@
           "name": "SessionParticipant_sessionId_GameSession_id_fk",
           "tableFrom": "SessionParticipant",
           "tableTo": "GameSession",
-          "columnsFrom": [
-            "sessionId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["sessionId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -426,12 +408,8 @@
           "name": "SessionParticipant_userId_User_id_fk",
           "tableFrom": "SessionParticipant",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -542,9 +520,7 @@
         "User_phone_unique": {
           "name": "User_phone_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "phone"
-          ]
+          "columns": ["phone"]
         }
       },
       "policies": {},

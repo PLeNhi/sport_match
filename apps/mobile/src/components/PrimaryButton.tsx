@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   TouchableOpacity,
   Text,
@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
-} from 'react-native';
+} from "react-native";
 
 interface PrimaryButtonProps {
   title: string;
@@ -15,7 +15,7 @@ interface PrimaryButtonProps {
   disabled?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: "primary" | "secondary" | "danger";
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -25,7 +25,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   disabled = false,
   style,
   textStyle,
-  variant = 'primary',
+  variant = "primary",
 }) => {
   const isDisabled = disabled || loading;
 
@@ -44,16 +44,10 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? '#fff' : '#000'}
+          color={variant === "primary" ? "#fff" : "#000"}
         />
       ) : (
-        <Text
-          style={[
-            styles.text,
-            styles[`${variant}Text`],
-            textStyle,
-          ]}
-        >
+        <Text style={[styles.text, styles[`${variant}Text`], textStyle]}>
           {title}
         </Text>
       )}
@@ -66,35 +60,35 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     minHeight: 44,
   },
   primary: {
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
   },
   secondary: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   danger: {
-    backgroundColor: '#ff3b30',
+    backgroundColor: "#ff3b30",
   },
   disabled: {
     opacity: 0.5,
   },
   text: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   primaryText: {
-    color: '#fff',
+    color: "#fff",
   },
   secondaryText: {
-    color: '#333',
+    color: "#333",
   },
   dangerText: {
-    color: '#fff',
+    color: "#fff",
   },
 });

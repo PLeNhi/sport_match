@@ -1,12 +1,12 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { authAPI, usersAPI, hostsAPI } from '../utils/api';
-import { useAuthStore } from '../store/auth.store';
-import { setAuthToken, clearAuthToken } from '../utils/api-client';
-import { UserDTO } from '@sport-match/shared';
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { authAPI, usersAPI, hostsAPI } from "../utils/api";
+import { useAuthStore } from "../store/auth.store";
+import { setAuthToken, clearAuthToken } from "../utils/api-client";
+import { UserDTO } from "@sport-match/shared";
 
 export const authKeys = {
-  all: ['auth'] as const,
-  me: () => [...authKeys.all, 'me'] as const,
+  all: ["auth"] as const,
+  me: () => [...authKeys.all, "me"] as const,
 };
 
 export function useLogin() {
@@ -15,13 +15,14 @@ export function useLogin() {
   const setError = useAuthStore((state) => state.setError);
 
   return useMutation({
-    mutationFn: (data: { phone: string; name?: string }) => authAPI.mockLogin(data),
+    mutationFn: (data: { phone: string; name?: string }) =>
+      authAPI.mockLogin(data),
     onSuccess: async (response) => {
       await setAuthToken(response.token);
       setUser(response.user, response.token);
     },
     onError: (error: any) => {
-      setError(error?.response?.data?.message || 'Login failed');
+      setError(error?.response?.data?.message || "Login failed");
     },
   });
 }
@@ -51,7 +52,7 @@ export function useUpdateProfile() {
 
 export function useHostProfile() {
   return useQuery({
-    queryKey: ['host', 'profile'],
+    queryKey: ["host", "profile"],
     queryFn: () => hostsAPI.getMe(),
   });
 }

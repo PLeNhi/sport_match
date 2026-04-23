@@ -5,8 +5,8 @@ import {
   IsNumber,
   IsEnum,
   Min,
-} from 'class-validator';
-import { SKILL_LEVELS, type SkillLevel } from '@sport-match/shared';
+} from "class-validator";
+import { SKILL_LEVELS, type SkillLevel } from "@sport-match/shared";
 
 export class CreateSessionDto {
   @IsString()

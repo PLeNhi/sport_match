@@ -1,9 +1,19 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { DrizzleService } from '@common/prisma.service';
-import { gameSessions, venues, users, hostProfiles, sessionParticipants } from '../../db/schema';
-import { eq, and } from 'drizzle-orm';
-import { CreateSessionDto, UpdateSessionDto } from './dto/create-session.dto';
-import { GameSessionDTO, SessionFilterParams } from '@sport-match/shared';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from "@nestjs/common";
+import { DrizzleService } from "@common/prisma.service";
+import {
+  gameSessions,
+  venues,
+  users,
+  hostProfiles,
+  sessionParticipants,
+} from "../../db/schema";
+import { eq, and } from "drizzle-orm";
+import { CreateSessionDto, UpdateSessionDto } from "./dto/create-session.dto";
+import { GameSessionDTO, SessionFilterParams } from "@sport-match/shared";
 
 @Injectable()
 export class SessionsService {
@@ -11,10 +21,14 @@ export class SessionsService {
 
   async create(hostId: string, dto: CreateSessionDto): Promise<GameSessionDTO> {
     // Validate venue exists
-    const venueResult = await this.drizzle.db.select().from(venues).where(eq(venues.id, dto.venueId)).limit(1);
+    const venueResult = await this.drizzle.db
+      .select()
+      .from(venues)
+      .where(eq(venues.id, dto.venueId))
+      .limit(1);
 
     if (venueResult.length === 0) {
-      throw new BadRequestException('Venue not found');
+      throw new BadRequestException("Venue not found");
     }
 
     const sessionResult = await this.drizzle.db
@@ -30,8 +44,8 @@ export class SessionsService {
         maxPlayers: dto.maxPlayers,
         description: dto.description,
         priceLabel: dto.priceLabel,
-        status: 'open',
-        sportType: 'badminton',
+        status: "open",
+        sportType: "badminton",
       })
       .returning();
 
@@ -43,9 +57,11 @@ export class SessionsService {
   async findAll(filters: SessionFilterParams = {}): Promise<GameSessionDTO[]> {
     const conditions = [];
     if (filters.date) conditions.push(eq(gameSessions.date, filters.date));
-    if (filters.skillLevel) conditions.push(eq(gameSessions.skillLevel, filters.skillLevel));
-    if (filters.hostId) conditions.push(eq(gameSessions.hostId, filters.hostId));
-    if (filters.onlyOpen) conditions.push(eq(gameSessions.status, 'open'));
+    if (filters.skillLevel)
+      conditions.push(eq(gameSessions.skillLevel, filters.skillLevel));
+    if (filters.hostId)
+      conditions.push(eq(gameSessions.hostId, filters.hostId));
+    if (filters.onlyOpen) conditions.push(eq(gameSessions.status, "open"));
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
@@ -61,7 +77,11 @@ export class SessionsService {
       if (fullSession) {
         // Apply venue filters
         if (filters.city && fullSession.venue?.city !== filters.city) continue;
-        if (filters.district && fullSession.venue?.district !== filters.district) continue;
+        if (
+          filters.district &&
+          fullSession.venue?.district !== filters.district
+        )
+          continue;
         sessions.push(fullSession);
       }
     }
@@ -70,7 +90,11 @@ export class SessionsService {
   }
 
   async findById(id: string, userId?: string): Promise<GameSessionDTO | null> {
-    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
+    const sessionResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(eq(gameSessions.id, id))
+      .limit(1);
 
     if (sessionResult.length === 0) {
       return null;
@@ -98,16 +122,24 @@ export class SessionsService {
     return sessions.map((s) => this.mapToDTO(s));
   }
 
-  async update(id: string, hostId: string, dto: UpdateSessionDto): Promise<GameSessionDTO> {
-    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
+  async update(
+    id: string,
+    hostId: string,
+    dto: UpdateSessionDto,
+  ): Promise<GameSessionDTO> {
+    const sessionResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(eq(gameSessions.id, id))
+      .limit(1);
 
     if (sessionResult.length === 0) {
-      throw new NotFoundException('Session not found');
+      throw new NotFoundException("Session not found");
     }
 
     const session = sessionResult[0];
     if (session.hostId !== hostId) {
-      throw new BadRequestException('Only host can update this session');
+      throw new BadRequestException("Only host can update this session");
     }
 
     await this.drizzle.db
@@ -129,13 +161,21 @@ export class SessionsService {
   }
 
   private async getSessionWithRelations(sessionId: string) {
-    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, sessionId)).limit(1);
+    const sessionResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(eq(gameSessions.id, sessionId))
+      .limit(1);
     if (sessionResult.length === 0) return null;
 
     const session = sessionResult[0];
 
     // Get venue
-    const venueResult = await this.drizzle.db.select().from(venues).where(eq(venues.id, session.venueId)).limit(1);
+    const venueResult = await this.drizzle.db
+      .select()
+      .from(venues)
+      .where(eq(venues.id, session.venueId))
+      .limit(1);
     const venue = venueResult[0] || null;
 
     // Get host with profile
@@ -149,10 +189,15 @@ export class SessionsService {
       .where(eq(users.id, session.hostId))
       .limit(1);
 
-    const host = hostResult[0] ? { ...hostResult[0].user, hostProfile: hostResult[0].profile } : null;
+    const host = hostResult[0]
+      ? { ...hostResult[0].user, hostProfile: hostResult[0].profile }
+      : null;
 
     // Get participants
-    const participantsResult = await this.drizzle.db.select().from(sessionParticipants).where(eq(sessionParticipants.sessionId, sessionId));
+    const participantsResult = await this.drizzle.db
+      .select()
+      .from(sessionParticipants)
+      .where(eq(sessionParticipants.sessionId, sessionId));
 
     return {
       ...session,
@@ -167,7 +212,11 @@ export class SessionsService {
     status: string,
     sessionData?: any,
   ): Promise<GameSessionDTO | null> {
-    const sessionResult = await this.drizzle.db.select().from(gameSessions).where(eq(gameSessions.id, id)).limit(1);
+    const sessionResult = await this.drizzle.db
+      .select()
+      .from(gameSessions)
+      .where(eq(gameSessions.id, id))
+      .limit(1);
 
     if (sessionResult.length === 0) {
       return null;
@@ -178,7 +227,10 @@ export class SessionsService {
       Object.assign(updateData, sessionData);
     }
 
-    await this.drizzle.db.update(gameSessions).set(updateData).where(eq(gameSessions.id, id));
+    await this.drizzle.db
+      .update(gameSessions)
+      .set(updateData)
+      .where(eq(gameSessions.id, id));
 
     const updated = await this.getSessionWithRelations(id);
     return this.mapToDTO(updated!);
@@ -187,7 +239,7 @@ export class SessionsService {
   private mapToDTO(session: any, userId?: string): GameSessionDTO {
     const joinedCount = session.participants.length;
     const isFull = joinedCount >= session.maxPlayers;
-    const status = isFull ? 'full' : session.status;
+    const status = isFull ? "full" : session.status;
 
     return {
       id: session.id,
@@ -219,7 +271,10 @@ export class SessionsService {
             avatarUrl: session.host.avatarUrl,
             role: session.host.role,
             location: session.host.city
-              ? { city: session.host.city, district: session.host.district || '' }
+              ? {
+                  city: session.host.city,
+                  district: session.host.district || "",
+                }
               : null,
             createdAt: session.host.createdAt.toISOString(),
             updatedAt: session.host.updatedAt.toISOString(),

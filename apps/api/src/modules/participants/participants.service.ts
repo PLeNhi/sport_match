@@ -1,20 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { DrizzleService } from '@common/prisma.service';
-import { sessionParticipants } from '../../db/schema';
-import { eq, and } from 'drizzle-orm';
-import { SessionParticipantDTO } from '@sport-match/shared';
+import { Injectable } from "@nestjs/common";
+import { DrizzleService } from "@common/prisma.service";
+import { sessionParticipants } from "../../db/schema";
+import { eq, and } from "drizzle-orm";
+import { SessionParticipantDTO } from "@sport-match/shared";
 
 @Injectable()
 export class ParticipantsService {
   constructor(private drizzle: DrizzleService) {}
 
-  async create(sessionId: string, userId: string): Promise<SessionParticipantDTO> {
+  async create(
+    sessionId: string,
+    userId: string,
+  ): Promise<SessionParticipantDTO> {
     const result = await this.drizzle.db
       .insert(sessionParticipants)
       .values({
         sessionId,
         userId,
-        attendanceStatus: 'joined',
+        attendanceStatus: "joined",
       })
       .returning();
 
@@ -28,7 +31,12 @@ export class ParticipantsService {
     const result = await this.drizzle.db
       .select()
       .from(sessionParticipants)
-      .where(and(eq(sessionParticipants.sessionId, sessionId), eq(sessionParticipants.userId, userId)))
+      .where(
+        and(
+          eq(sessionParticipants.sessionId, sessionId),
+          eq(sessionParticipants.userId, userId),
+        ),
+      )
       .limit(1);
 
     if (result.length === 0) {
@@ -62,7 +70,10 @@ export class ParticipantsService {
     return this.mapToDTO(result[0]);
   }
 
-  async updateStatus(id: string, attendanceStatus: string): Promise<SessionParticipantDTO> {
+  async updateStatus(
+    id: string,
+    attendanceStatus: string,
+  ): Promise<SessionParticipantDTO> {
     const result = await this.drizzle.db
       .update(sessionParticipants)
       .set({ attendanceStatus, updatedAt: new Date() })
@@ -75,7 +86,7 @@ export class ParticipantsService {
   async remove(id: string): Promise<SessionParticipantDTO> {
     const result = await this.drizzle.db
       .update(sessionParticipants)
-      .set({ attendanceStatus: 'removed', updatedAt: new Date() })
+      .set({ attendanceStatus: "removed", updatedAt: new Date() })
       .where(eq(sessionParticipants.id, id))
       .returning();
 

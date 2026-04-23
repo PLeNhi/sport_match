@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { UserDTO } from '@sport-match/shared';
+import { create } from "zustand";
+import { UserDTO } from "@sport-match/shared";
 
 interface AuthStore {
   user: UserDTO | null;

@@ -1,15 +1,9 @@
-import React from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { SessionCard, LoadingView, EmptyState } from '../components';
-import { useSessionsList } from '../hooks/useSession';
-import { GameSessionDTO } from '@sport-match/shared';
+import React from "react";
+import { View, FlatList, StyleSheet, Text, SafeAreaView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { SessionCard, LoadingView, EmptyState } from "../components";
+import { useSessionsList } from "../hooks/useSession";
+import { GameSessionDTO } from "@sport-match/shared";
 
 export function MySessionsScreen({ navigation }: any) {
   const { data, isLoading, refetch } = useSessionsList();
@@ -22,7 +16,7 @@ export function MySessionsScreen({ navigation }: any) {
   );
 
   const handleSessionPress = (session: GameSessionDTO) => {
-    navigation.navigate('SessionDetail', { sessionId: session.id });
+    navigation.navigate("SessionDetail", { sessionId: session.id });
   };
 
   if (isLoading) {
@@ -64,23 +58,23 @@ export function MySessionsScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   header: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: "#999",
     marginTop: 4,
   },
   listContent: {

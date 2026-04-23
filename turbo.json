@@ -17,6 +17,11 @@
     "lint": {
       "outputs": [],
       "cache": false
+    },
+    "tasks": {
+      "//#format": {
+        "cache": false
+      }
     }
   }
 }

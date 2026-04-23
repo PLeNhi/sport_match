@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ScrollView,
@@ -6,10 +6,10 @@ import {
   Text,
   SafeAreaView,
   FlatList,
-} from 'react-native';
-import { PrimaryButton, LoadingView, StatusBadge } from '../components';
-import { useSessionDetail } from '../hooks/useSession';
-import { formatDate, formatTime } from '@sport-match/shared';
+} from "react-native";
+import { PrimaryButton, LoadingView, StatusBadge } from "../components";
+import { useSessionDetail } from "../hooks/useSession";
+import { formatDate, formatTime } from "@sport-match/shared";
 
 export function HostSessionDetailScreen({ route, navigation }: any) {
   const { sessionId } = route.params;
@@ -92,7 +92,11 @@ export function HostSessionDetailScreen({ route, navigation }: any) {
       </ScrollView>
 
       <View style={styles.actions}>
-        <PrimaryButton title="Edit Session" onPress={() => {}} style={styles.button} />
+        <PrimaryButton
+          title="Edit Session"
+          onPress={() => {}}
+          style={styles.button}
+        />
         <PrimaryButton
           title="Cancel Session"
           variant="danger"
@@ -107,77 +111,77 @@ export function HostSessionDetailScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   content: {
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
   },
   titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     flex: 1,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 12,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   value: {
     fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
+    color: "#333",
+    fontWeight: "600",
   },
   participantRow: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   participantName: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
   },
   participantStatus: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
     marginTop: 4,
   },
   emptyText: {
     fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
+    color: "#999",
+    textAlign: "center",
     paddingVertical: 20,
   },
   actions: {
@@ -190,8 +194,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: '#ff3b30',
-    textAlign: 'center',
+    color: "#ff3b30",
+    textAlign: "center",
     marginTop: 20,
   },
 });

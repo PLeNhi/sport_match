@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ScrollView,
@@ -6,11 +6,16 @@ import {
   Text,
   SafeAreaView,
   ActivityIndicator,
-} from 'react-native';
-import { PrimaryButton, StatusBadge, LoadingView } from '../components';
-import { useSessionDetail, useJoinSession, useLeaveSession, useConfirmAttendance } from '../hooks/useSession';
-import { useAuthStore } from '../store/auth.store';
-import { formatDate, formatTime } from '@sport-match/shared';
+} from "react-native";
+import { PrimaryButton, StatusBadge, LoadingView } from "../components";
+import {
+  useSessionDetail,
+  useJoinSession,
+  useLeaveSession,
+  useConfirmAttendance,
+} from "../hooks/useSession";
+import { useAuthStore } from "../store/auth.store";
+import { formatDate, formatTime } from "@sport-match/shared";
 
 export function SessionDetailScreen({ route, navigation }: any) {
   const { sessionId } = route.params;
@@ -38,10 +43,10 @@ export function SessionDetailScreen({ route, navigation }: any) {
     joinSession.mutate(sessionId, {
       onSuccess: () => {
         refetch();
-        alert('Joined session successfully!');
+        alert("Joined session successfully!");
       },
       onError: (error: any) => {
-        alert(error?.response?.data?.message || 'Failed to join session');
+        alert(error?.response?.data?.message || "Failed to join session");
       },
     });
   };
@@ -50,24 +55,24 @@ export function SessionDetailScreen({ route, navigation }: any) {
     leaveSession.mutate(sessionId, {
       onSuccess: () => {
         refetch();
-        alert('Left session');
+        alert("Left session");
       },
       onError: (error: any) => {
-        alert(error?.response?.data?.message || 'Failed to leave session');
+        alert(error?.response?.data?.message || "Failed to leave session");
       },
     });
   };
 
   const handleConfirm = async () => {
     confirmAttendance.mutate(
-      { sessionId, status: 'confirmed' },
+      { sessionId, status: "confirmed" },
       {
         onSuccess: () => {
           refetch();
-          alert('Attendance confirmed!');
+          alert("Attendance confirmed!");
         },
         onError: (error: any) => {
-          alert(error?.response?.data?.message || 'Failed to confirm');
+          alert(error?.response?.data?.message || "Failed to confirm");
         },
       },
     );
@@ -168,7 +173,7 @@ export function SessionDetailScreen({ route, navigation }: any) {
             title="Join Session"
             onPress={handleJoin}
             loading={joinSession.isPending}
-            disabled={session.status === 'full'}
+            disabled={session.status === "full"}
             style={styles.button}
           />
         )}
@@ -180,68 +185,68 @@ export function SessionDetailScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   content: {
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
   },
   titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 8,
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     flex: 1,
   },
   level: {
     fontSize: 14,
-    color: '#0066cc',
-    fontWeight: '500',
+    color: "#0066cc",
+    fontWeight: "500",
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 12,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   label: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    color: "#666",
+    fontWeight: "500",
   },
   value: {
     fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
+    color: "#333",
+    fontWeight: "600",
   },
   description: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     lineHeight: 20,
   },
   actions: {
@@ -254,8 +259,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: '#ff3b30',
-    textAlign: 'center',
+    color: "#ff3b30",
+    textAlign: "center",
     marginTop: 20,
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ScrollView,
@@ -7,28 +7,28 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import { PrimaryButton, LoadingView } from '../components';
-import { useCreateSession, useVenuesList } from '../hooks/useSession';
-import { SKILL_LEVELS } from '@sport-match/shared';
+} from "react-native";
+import { PrimaryButton, LoadingView } from "../components";
+import { useCreateSession, useVenuesList } from "../hooks/useSession";
+import { SKILL_LEVELS } from "@sport-match/shared";
 
 export function CreateSessionScreen({ navigation }: any) {
-  const [title, setTitle] = React.useState('');
-  const [venueId, setVenueId] = React.useState('');
-  const [date, setDate] = React.useState('');
-  const [startTime, setStartTime] = React.useState('');
-  const [endTime, setEndTime] = React.useState('');
-  const [skillLevel, setSkillLevel] = React.useState('beginner');
-  const [maxPlayers, setMaxPlayers] = React.useState('16');
-  const [description, setDescription] = React.useState('');
-  const [priceLabel, setPriceLabel] = React.useState('');
+  const [title, setTitle] = React.useState("");
+  const [venueId, setVenueId] = React.useState("");
+  const [date, setDate] = React.useState("");
+  const [startTime, setStartTime] = React.useState("");
+  const [endTime, setEndTime] = React.useState("");
+  const [skillLevel, setSkillLevel] = React.useState("beginner");
+  const [maxPlayers, setMaxPlayers] = React.useState("16");
+  const [description, setDescription] = React.useState("");
+  const [priceLabel, setPriceLabel] = React.useState("");
 
   const createSession = useCreateSession();
   const { data: venuesData, isLoading: venuesLoading } = useVenuesList();
 
   const handleCreate = async () => {
     if (!title.trim() || !venueId || !date || !startTime || !endTime) {
-      alert('Please fill in all required fields');
+      alert("Please fill in all required fields");
       return;
     }
 
@@ -46,11 +46,11 @@ export function CreateSessionScreen({ navigation }: any) {
       },
       {
         onSuccess: () => {
-          alert('Session created successfully!');
+          alert("Session created successfully!");
           navigation.goBack();
         },
         onError: (error: any) => {
-          alert(error?.response?.data?.message || 'Failed to create session');
+          alert(error?.response?.data?.message || "Failed to create session");
         },
       },
     );
@@ -79,7 +79,7 @@ export function CreateSessionScreen({ navigation }: any) {
           <Text style={styles.label}>Venue *</Text>
           <View style={styles.selectContainer}>
             <Text style={styles.selectLabel}>
-              {venues.find((v) => v.id === venueId)?.name || 'Select venue'}
+              {venues.find((v) => v.id === venueId)?.name || "Select venue"}
             </Text>
           </View>
 
@@ -172,7 +172,7 @@ export function CreateSessionScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   content: {
     paddingHorizontal: 16,
@@ -180,71 +180,71 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     marginBottom: 20,
   },
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 8,
     marginTop: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
   textArea: {
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     paddingTop: 12,
   },
   selectContainer: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   selectLabel: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
   chipsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   chip: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#f9f9f9',
+    borderColor: "#ddd",
+    backgroundColor: "#f9f9f9",
   },
   chipSelected: {
-    backgroundColor: '#0066cc',
-    borderColor: '#0066cc',
+    backgroundColor: "#0066cc",
+    borderColor: "#0066cc",
   },
   chipText: {
     fontSize: 13,
-    color: '#666',
-    fontWeight: '500',
+    color: "#666",
+    fontWeight: "500",
   },
   chipTextSelected: {
-    color: '#fff',
+    color: "#fff",
   },
   button: {
     marginTop: 24,

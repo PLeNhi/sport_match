@@ -1,5 +1,5 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { Request, Response, NextFunction } from "express";
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -7,9 +7,11 @@ export class LoggerMiddleware implements NestMiddleware {
     const { method, originalUrl } = req;
     const start = Date.now();
 
-    res.on('finish', () => {
+    res.on("finish", () => {
       const duration = Date.now() - start;
-      console.log(`[${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`);
+      console.log(
+        `[${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`,
+      );
     });
 
     next();

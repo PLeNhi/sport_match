@@ -1,16 +1,20 @@
 /**
  * Validation helpers and utilities
  */
-import type { SessionStatus, AttendanceStatus, SessionParticipantDTO } from './types';
+import type {
+  SessionStatus,
+  AttendanceStatus,
+  SessionParticipantDTO,
+} from "./types";
 
 export function isValidPhone(phone: string): boolean {
   // Simple validation for Vietnamese phone numbers
-  const normalized = phone.replace(/\D/g, '');
+  const normalized = phone.replace(/\D/g, "");
   return normalized.length >= 9 && normalized.length <= 12;
 }
 
 export function formatPhone(phone: string): string {
-  return phone.replace(/\D/g, '');
+  return phone.replace(/\D/g, "");
 }
 
 export function isSessionActive(startTime: string, date: string): boolean {
@@ -28,7 +32,7 @@ export function canJoinSession(
   isAlreadyJoined: boolean,
 ): boolean {
   return (
-    sessionStatus === 'open' &&
+    sessionStatus === "open" &&
     joinedCount < maxPlayers &&
     isSessionActive(startTime, date) &&
     !isAlreadyJoined
@@ -53,11 +57,11 @@ export function formatTime(time: string): string {
 
 export function formatDate(date: string): string {
   const dateObj = new Date(`${date}T00:00:00`);
-  return dateObj.toLocaleDateString('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  return dateObj.toLocaleDateString("en-US", {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 

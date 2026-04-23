@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { DrizzleService } from '@common/prisma.service';
-import { venues } from '../../db/schema';
-import { eq, and } from 'drizzle-orm';
-import { VenueDTO } from '@sport-match/shared';
+import { Injectable } from "@nestjs/common";
+import { DrizzleService } from "@common/prisma.service";
+import { venues } from "../../db/schema";
+import { eq, and } from "drizzle-orm";
+import { VenueDTO } from "@sport-match/shared";
 
 @Injectable()
 export class VenuesService {
   constructor(private drizzle: DrizzleService) {}
 
-  async findAll(filters?: { city?: string; district?: string }): Promise<VenueDTO[]> {
+  async findAll(filters?: {
+    city?: string;
+    district?: string;
+  }): Promise<VenueDTO[]> {
     const conditions = [];
     if (filters?.city) conditions.push(eq(venues.city, filters.city));
-    if (filters?.district) conditions.push(eq(venues.district, filters.district));
+    if (filters?.district)
+      conditions.push(eq(venues.district, filters.district));
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 

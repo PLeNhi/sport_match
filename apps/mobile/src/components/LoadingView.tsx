@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 
 interface LoadingViewProps {
   message?: string;
 }
 
-export const LoadingView: React.FC<LoadingViewProps> = ({ message = 'Loading...' }) => (
+export const LoadingView: React.FC<LoadingViewProps> = ({
+  message = "Loading...",
+}) => (
   <View style={styles.container}>
     <ActivityIndicator size="large" color="#0066cc" />
     <Text style={styles.text}>{message}</Text>
@@ -15,13 +17,13 @@ export const LoadingView: React.FC<LoadingViewProps> = ({ message = 'Loading...'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   text: {
     marginTop: 12,
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
 });

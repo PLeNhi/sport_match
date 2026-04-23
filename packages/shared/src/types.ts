@@ -4,48 +4,50 @@
 
 // User-related types
 export const USER_ROLES = {
-  PLAYER: 'player',
-  HOST: 'host',
-  ADMIN: 'admin',
+  PLAYER: "player",
+  HOST: "host",
+  ADMIN: "admin",
 } as const;
 
-export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 // Skill levels for badminton
 export const SKILL_LEVELS = {
-  BEGINNER: 'beginner',
-  INTERMEDIATE: 'intermediate',
-  ADVANCED: 'advanced',
+  BEGINNER: "beginner",
+  INTERMEDIATE: "intermediate",
+  ADVANCED: "advanced",
 } as const;
 
-export type SkillLevel = typeof SKILL_LEVELS[keyof typeof SKILL_LEVELS];
+export type SkillLevel = (typeof SKILL_LEVELS)[keyof typeof SKILL_LEVELS];
 
 // Game session statuses
 export const SESSION_STATUSES = {
-  OPEN: 'open',
-  FULL: 'full',
-  COMPLETED: 'completed',
-  CANCELLED: 'cancelled',
+  OPEN: "open",
+  FULL: "full",
+  COMPLETED: "completed",
+  CANCELLED: "cancelled",
 } as const;
 
-export type SessionStatus = typeof SESSION_STATUSES[keyof typeof SESSION_STATUSES];
+export type SessionStatus =
+  (typeof SESSION_STATUSES)[keyof typeof SESSION_STATUSES];
 
 // Attendance statuses for participants
 export const ATTENDANCE_STATUSES = {
-  JOINED: 'joined',
-  CONFIRMED: 'confirmed',
-  DECLINED: 'declined',
-  REMOVED: 'removed',
+  JOINED: "joined",
+  CONFIRMED: "confirmed",
+  DECLINED: "declined",
+  REMOVED: "removed",
 } as const;
 
-export type AttendanceStatus = typeof ATTENDANCE_STATUSES[keyof typeof ATTENDANCE_STATUSES];
+export type AttendanceStatus =
+  (typeof ATTENDANCE_STATUSES)[keyof typeof ATTENDANCE_STATUSES];
 
 // Sport types (for future multi-sport support)
 export const SPORT_TYPES = {
-  BADMINTON: 'badminton',
+  BADMINTON: "badminton",
 } as const;
 
-export type SportType = typeof SPORT_TYPES[keyof typeof SPORT_TYPES];
+export type SportType = (typeof SPORT_TYPES)[keyof typeof SPORT_TYPES];
 
 // Location types
 export interface Location {
@@ -148,7 +150,7 @@ export interface JoinSessionRequest {
 }
 
 export interface ConfirmAttendanceRequest {
-  attendanceStatus: 'confirmed' | 'declined';
+  attendanceStatus: "confirmed" | "declined";
 }
 
 export interface RemoveParticipantRequest {

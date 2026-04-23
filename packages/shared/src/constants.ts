@@ -5,49 +5,50 @@
 export const API_ROUTES = {
   // Auth
   AUTH: {
-    LOGIN: '/auth/mock-login',
-    ME: '/auth/me',
+    LOGIN: "/auth/mock-login",
+    ME: "/auth/me",
   },
 
   // Users
   USERS: {
-    ME: '/users/me',
-    PROFILE: '/users/me',
+    ME: "/users/me",
+    PROFILE: "/users/me",
   },
 
   // Host
   HOST: {
-    ME: '/hosts/me',
-    CREATE_PROFILE: '/hosts/me/create-profile',
-    UPDATE_PROFILE: '/hosts/me',
+    ME: "/hosts/me",
+    CREATE_PROFILE: "/hosts/me/create-profile",
+    UPDATE_PROFILE: "/hosts/me",
   },
 
   // Venues
   VENUES: {
-    LIST: '/venues',
+    LIST: "/venues",
     DETAIL: (id: string) => `/venues/${id}`,
   },
 
   // Sessions
   SESSIONS: {
-    LIST: '/sessions',
-    CREATE: '/sessions',
+    LIST: "/sessions",
+    CREATE: "/sessions",
     DETAIL: (id: string) => `/sessions/${id}`,
     UPDATE: (id: string) => `/sessions/${id}`,
     JOIN: (id: string) => `/sessions/${id}/join`,
     LEAVE: (id: string) => `/sessions/${id}/leave`,
     CONFIRM_ATTENDANCE: (id: string) => `/sessions/${id}/confirm-attendance`,
-    HOST_SESSIONS: '/sessions/host/me',
+    HOST_SESSIONS: "/sessions/host/me",
   },
 
   // Participants
   PARTICIPANTS: {
-    SESSION_PARTICIPANTS: (sessionId: string) => `/participants/session/${sessionId}`,
+    SESSION_PARTICIPANTS: (sessionId: string) =>
+      `/participants/session/${sessionId}`,
     REMOVE: (participantId: string) => `/participants/${participantId}/remove`,
   },
 
   // Health
-  HEALTH: '/health',
+  HEALTH: "/health",
 } as const;
 
 /**
@@ -65,6 +66,6 @@ export const UI_CONSTANTS = {
  * Distance/Location constants for MVP
  */
 export const LOCATION_CONSTANTS = {
-  DEFAULT_CITY: 'Nha Trang',
-  DEFAULT_DISTRICT: 'Nha Trang',
+  DEFAULT_CITY: "Nha Trang",
+  DEFAULT_DISTRICT: "Nha Trang",
 } as const;

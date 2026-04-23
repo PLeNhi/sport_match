@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ScrollView,
@@ -6,18 +6,18 @@ import {
   Text,
   SafeAreaView,
   TextInput,
-} from 'react-native';
-import { PrimaryButton, LoadingView } from '../components';
-import { useCreateHostProfile } from '../hooks/useAuth';
+} from "react-native";
+import { PrimaryButton, LoadingView } from "../components";
+import { useCreateHostProfile } from "../hooks/useAuth";
 
 export function BecomeHostScreen({ navigation }: any) {
-  const [displayName, setDisplayName] = React.useState('');
-  const [bio, setBio] = React.useState('');
+  const [displayName, setDisplayName] = React.useState("");
+  const [bio, setBio] = React.useState("");
   const createProfile = useCreateHostProfile();
 
   const handleCreateProfile = () => {
     if (!displayName.trim()) {
-      alert('Please enter your display name');
+      alert("Please enter your display name");
       return;
     }
 
@@ -25,11 +25,11 @@ export function BecomeHostScreen({ navigation }: any) {
       { displayName, bio },
       {
         onSuccess: () => {
-          alert('Welcome to the host community!');
-          navigation.navigate('HostDashboard');
+          alert("Welcome to the host community!");
+          navigation.navigate("HostDashboard");
         },
         onError: (error: any) => {
-          alert(error?.response?.data?.message || 'Failed to create profile');
+          alert(error?.response?.data?.message || "Failed to create profile");
         },
       },
     );
@@ -77,7 +77,7 @@ export function BecomeHostScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   content: {
     flexGrow: 1,
@@ -89,37 +89,37 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 8,
     marginTop: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
   textArea: {
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     paddingTop: 12,
   },
   button: {

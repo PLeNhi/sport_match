@@ -1,15 +1,9 @@
-import React from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-} from 'react-native';
-import { PrimaryButton, LoadingView } from '../components';
-import { useAuthStore } from '../store/auth.store';
-import { useLogout } from '../hooks/useAuth';
-import { clearAuthToken } from '../utils/api-client';
+import React from "react";
+import { View, ScrollView, StyleSheet, Text, SafeAreaView } from "react-native";
+import { PrimaryButton, LoadingView } from "../components";
+import { useAuthStore } from "../store/auth.store";
+import { useLogout } from "../hooks/useAuth";
+import { clearAuthToken } from "../utils/api-client";
 
 export function ProfileScreen({ navigation }: any) {
   const user = useAuthStore((state) => state.user);
@@ -23,15 +17,15 @@ export function ProfileScreen({ navigation }: any) {
       clearAuth();
       // Navigation will handle redirecting to login
     } catch (error) {
-      console.error('Logout error:', error);
-      alert('Failed to logout');
+      console.error("Logout error:", error);
+      alert("Failed to logout");
     } finally {
       setIsLoggingOut(false);
     }
   };
 
   const handleBecomeHost = () => {
-    navigation.navigate('BecomeHost');
+    navigation.navigate("BecomeHost");
   };
 
   if (!user) {
@@ -48,7 +42,7 @@ export function ProfileScreen({ navigation }: any) {
         <View style={styles.section}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user.name?.charAt(0).toUpperCase() || 'U'}
+              {user.name?.charAt(0).toUpperCase() || "U"}
             </Text>
           </View>
           <Text style={styles.name}>{user.name}</Text>
@@ -74,7 +68,7 @@ export function ProfileScreen({ navigation }: any) {
           )}
         </View>
 
-        {user.role === 'player' && (
+        {user.role === "player" && (
           <PrimaryButton
             title="Become a Host"
             onPress={handleBecomeHost}
@@ -97,7 +91,7 @@ export function ProfileScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   content: {
     paddingHorizontal: 16,
@@ -108,57 +102,57 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   avatar: {
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#0066cc',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#0066cc",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 12,
   },
   avatarText: {
     fontSize: 32,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
   },
   name: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
   },
   phone: {
     fontSize: 14,
-    color: '#999',
+    color: "#999",
     marginTop: 4,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   label: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    color: "#666",
+    fontWeight: "500",
   },
   value: {
     fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
+    color: "#333",
+    fontWeight: "600",
   },
   button: {
     marginBottom: 12,

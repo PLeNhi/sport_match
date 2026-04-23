@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   FlatList,
@@ -6,15 +6,24 @@ import {
   Text,
   SafeAreaView,
   Alert,
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { SessionCard, LoadingView, EmptyState, PrimaryButton } from '../components';
-import { useHostSessions } from '../hooks/useSession';
-import { useHostProfile } from '../hooks/useAuth';
-import { GameSessionDTO } from '@sport-match/shared';
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  SessionCard,
+  LoadingView,
+  EmptyState,
+  PrimaryButton,
+} from "../components";
+import { useHostSessions } from "../hooks/useSession";
+import { useHostProfile } from "../hooks/useAuth";
+import { GameSessionDTO } from "@sport-match/shared";
 
 export function HostDashboardScreen({ navigation }: any) {
-  const { data: sessionsData, isLoading: sessionsLoading, refetch: refetchSessions } = useHostSessions();
+  const {
+    data: sessionsData,
+    isLoading: sessionsLoading,
+    refetch: refetchSessions,
+  } = useHostSessions();
   const { data: profileData, isLoading: profileLoading } = useHostProfile();
 
   useFocusEffect(
@@ -24,11 +33,11 @@ export function HostDashboardScreen({ navigation }: any) {
   );
 
   const handleSessionPress = (session: GameSessionDTO) => {
-    navigation.navigate('HostSessionDetail', { sessionId: session.id });
+    navigation.navigate("HostSessionDetail", { sessionId: session.id });
   };
 
   const handleCreateSession = () => {
-    navigation.navigate('CreateSession');
+    navigation.navigate("CreateSession");
   };
 
   if (sessionsLoading || profileLoading) {
@@ -36,7 +45,7 @@ export function HostDashboardScreen({ navigation }: any) {
   }
 
   const sessions = sessionsData?.sessions || [];
-  const openSessions = sessions.filter((s) => s.status === 'open').length;
+  const openSessions = sessions.filter((s) => s.status === "open").length;
   const upcomingSessions = sessions.length;
 
   return (
@@ -44,7 +53,7 @@ export function HostDashboardScreen({ navigation }: any) {
       <View style={styles.header}>
         <Text style={styles.title}>Host Dashboard</Text>
         <Text style={styles.subtitle}>
-          {profileData?.profile?.displayName || 'Your Sessions'}
+          {profileData?.profile?.displayName || "Your Sessions"}
         </Text>
       </View>
 
@@ -91,27 +100,27 @@ export function HostDashboardScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   header: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: "#999",
     marginTop: 4,
   },
   statsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: 12,
@@ -121,22 +130,22 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 12,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   statOpen: {
-    backgroundColor: '#34C759',
+    backgroundColor: "#34C759",
   },
   statUpcoming: {
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
   },
   statNumber: {
     fontSize: 32,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
   },
   statLabel: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: "rgba(255, 255, 255, 0.8)",
     marginTop: 4,
   },
   createButton: {

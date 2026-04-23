@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { VenuesService } from './venues.service';
-import { VenuesController } from './venues.controller';
-import { DrizzleService } from '@common/prisma.service';
+import { Module } from "@nestjs/common";
+import { VenuesService } from "./venues.service";
+import { VenuesController } from "./venues.controller";
+import { DrizzleService } from "@common/prisma.service";
 
 @Module({
   controllers: [VenuesController],
